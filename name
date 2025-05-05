@@ -1,0 +1,47 @@
+import java.io.*;
+import java.util.Random;
+
+public class name {
+    private int[] list = new int[60];
+    private File file = new File("fileHalaMadrid.txt");
+
+
+    public File getFile() {
+        return file;
+    }
+
+    public void fillFile(){
+        File file = new File("fileHalaMadrid.txt");
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try (FileWriter fw = new FileWriter(file, false)) {
+            fw.write("");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        for(int i = 0; i < 60; i++){
+            Random rand = new Random();
+            int size = rand.nextInt(1, 10000);
+            list[i] = size;
+            try (FileOutputStream outputStream = new FileOutputStream(file, true)) {
+                for (int j = 0; j < size; j++) {
+                    for(int j2 = 0; j2<2; j2++) {
+                        String s = Integer.toString(rand.nextInt(0, 5000)) + " ";
+                        outputStream.write(s.getBytes());
+
+                    }
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public int[] getList() {
+        return list;
+    }
+
+}
