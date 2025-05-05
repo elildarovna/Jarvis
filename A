@@ -1,0 +1,52 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class A {
+
+    public static void main(String[] args) {
+        test();
+    }
+
+    public static void test(){
+        name name = new name();
+        name.fillFile();
+
+        try(Scanner scanner = new Scanner(new File("fileHalaMadrid.txt"))){
+            List<Integer> allNumbers = new ArrayList<>();
+            while (scanner.hasNextInt()) {
+                allNumbers.add(scanner.nextInt());
+            }
+
+            int currentIndex = 0;
+
+            for(int i = 0; i < 60; i++){
+                int size = name.getList()[i];
+                JarvisMarch.Point[] ls = new JarvisMarch.Point[size];
+                for (int j = 0; j < size; j++) {
+                    int x = allNumbers.get(currentIndex);
+                    currentIndex++;
+                    int y = allNumbers.get(currentIndex);
+                    currentIndex++;
+                    JarvisMarch.Point point = new JarvisMarch.Point(x, y);
+                    ls[j] = point;
+
+                }
+                long time = System.nanoTime();
+                List<JarvisMarch.Point> sorted = JarvisMarch.convexHull(ls);
+                long time2 = System.nanoTime();
+
+
+                System.out.println("Количество элементов " + size + " время: " + (time2 - time) + " количество итераций " + JarvisMarch.getIterations());
+
+            }
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("Файл не найден: " + e.getMessage());
+        }
+
+
+    }
+}
+
