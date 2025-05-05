@@ -1,0 +1,68 @@
+import java.util.*;
+
+public class JarvisMarch {
+    private static int iterations = 0;
+    static class Point {
+        int x, y;
+
+        Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    static int orientation(Point p, Point q, Point r) {
+        return (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+    }
+
+    public static List<Point> convexHull(Point[] points) {
+        iterations = 0;
+        int n = points.length;
+        if (n < 3) return List.of();
+
+        List<Point> hull = new ArrayList<>();
+
+
+        // Находим самую левую точку
+        int leftmost = 0;
+        for (int i = 1; i < n; i++) {
+            if (points[i].x < points[leftmost].x) {
+                leftmost = i;
+            }
+        }
+
+        int p = leftmost;
+        do {
+            hull.add(points[p]);
+            int q = (p + 1) % n;
+
+            // Внутренний цикл для поиска следующей точки оболочки
+            for (int i = 0; i < n; i++) {
+                iterations++; // Считаем каждое сравнение точек
+                int orient = orientation(points[p], points[i], points[q]);
+                if (orient < 0 || (orient == 0 && distance(points[p], points[i]) > distance(points[p], points[q]))) {
+                    q = i;
+                }
+            }
+
+            p = q;
+
+            if (iterations > 2 * n * n) { // Защита от бесконечного цикла
+                break;
+            }
+        } while (p != leftmost && hull.size() <= n); // Доп. проверка на размер оболочки
+
+        return hull;
+    }
+
+    private static int distance(Point a, Point b) {
+        return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
+    }
+    public static int getIterations(){
+        return iterations;
+    }
+
+    public static void zeroIterations(){
+        iterations = 0;
+    }
+}
